@@ -2,6 +2,7 @@
   "name": "mineflayer-bot",
   "version": "1.0.0",
   "description": "A simple Minecraft bot using Mineflayer",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
