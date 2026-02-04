@@ -8,21 +8,21 @@ let isRestarting = false;
 const BOT_OPTIONS = {
   host: 'frankyowen.mcsh.io',
   port: 25565,
-  username: 'Ipwhen',
+  username: 'IronSaza',
   version: '1.20.1'
 };
 
 function startBot() {
-  if (bot) return; // กัน login ซ้อน
+  if (bot) return;
 
   console.log('Starting bot...');
   bot = mineflayer.createBot(BOT_OPTIONS);
 
   bot.once('spawn', () => {
     console.log('Bot เข้าเซิร์ฟแล้ว');
-    bot.chat('/create');
+    bot.chat('เข้าเกมแล้ว 🤖');
 
-    // ตั้งเวลารีสตาร์ททุก 1 ชั่วโมง
+    // รีสตาร์ททุก 1 ชม.
     reconnectTimer = setTimeout(() => {
       restartBot('1 hour reconnect');
     }, 60 * 60 * 1000);
@@ -33,13 +33,14 @@ function startBot() {
     restartBot('kicked');
   });
 
-  bot.on('error', err => {
-    console.log('ERROR:', err);
+  bot.on('end', () => {
+    console.log('Disconnected');
+    restartBot('disconnected');
   });
 
-  bot.on('end', () => {
-    console.log('Bot disconnected');
-    bot = null;
+  bot.on('error', err => {
+    console.log('ERROR:', err);
+    // error บางแบบยังไม่หลุดจริง ไม่ restart ทันที
   });
 }
 
@@ -55,15 +56,17 @@ function restartBot(reason) {
   }
 
   if (bot) {
-    bot.quit();
+    try {
+      bot.quit();
+    } catch {}
     bot = null;
   }
 
   setTimeout(() => {
     isRestarting = false;
     startBot();
-  }, 5000); // เว้น 5 วิ กัน server มองว่า spam
+  }, 5000); // หน่วง 5 วิ กัน spam
 }
 
-// เริ่มครั้งแรก
+// start ครั้งแรก
 startBot();
