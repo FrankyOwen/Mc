@@ -1,5 +1,5 @@
 import mineflayer from 'mineflayer';
-const keep_alive = require('./keep_alive.js');
+import keep_alive from './keep_alive.js';
 const bot = mineflayer.createBot({
   host: '191.96.231.13',   // IP / domain server
   port: 13863,
