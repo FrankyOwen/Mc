@@ -13,42 +13,55 @@ const BOT_OPTIONS = {
 };
 
 function startBot() {
-  if (bot) return;
+  if (bot || isRestarting) return;
 
-  console.log('Starting bot...');
+  console.log('[BOT] Starting...');
   bot = mineflayer.createBot(BOT_OPTIONS);
 
   bot.once('spawn', () => {
-    console.log('Bot เข้าเซิร์ฟแล้ว');
+    console.log('[BOT] Spawned');
     bot.chat('เข้าเกมแล้ว 🤖');
 
-    // รีสตาร์ททุก 1 ชม.
+    // รีสตาร์ททุก 1 ชั่วโมง
     reconnectTimer = setTimeout(() => {
-      restartBot('1 hour reconnect');
+      restartBot('1 hour reconnect', 5000);
     }, 60 * 60 * 1000);
   });
 
   bot.on('kicked', reason => {
-    console.log('KICKED:', reason);
-    restartBot('kicked');
+    const msg =
+      typeof reason === 'string'
+        ? reason
+        : reason?.text || JSON.stringify(reason);
+
+    console.log('[BOT] KICKED:', msg);
+
+    if (
+      msg.includes('still starting') ||
+      msg.includes('failed to start')
+    ) {
+      // เซิร์ฟยัง boot อยู่ → รอนานขึ้น
+      restartBot('server starting', 60000);
+    } else {
+      restartBot('kicked', 5000);
+    }
   });
 
   bot.on('end', () => {
-    console.log('Disconnected');
-    restartBot('disconnected');
+    console.log('[BOT] Disconnected');
+    restartBot('disconnected', 5000);
   });
 
   bot.on('error', err => {
-    console.log('ERROR:', err);
-    // error บางแบบยังไม่หลุดจริง ไม่ restart ทันที
+    console.log('[BOT] ERROR:', err?.message || err);
   });
 }
 
-function restartBot(reason) {
+function restartBot(reason, delay = 5000) {
   if (isRestarting) return;
   isRestarting = true;
 
-  console.log(`Restarting bot (${reason})`);
+  console.log(`[BOT] Restarting (${reason}) in ${delay / 1000}s`);
 
   if (reconnectTimer) {
     clearTimeout(reconnectTimer);
@@ -65,8 +78,8 @@ function restartBot(reason) {
   setTimeout(() => {
     isRestarting = false;
     startBot();
-  }, 5000); // หน่วง 5 วิ กัน spam
+  }, delay);
 }
 
-// start ครั้งแรก
+// เริ่มครั้งแรก
 startBot();
