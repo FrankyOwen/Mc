@@ -20,7 +20,7 @@ function startBot() {
 
   bot.once('spawn', () => {
     console.log('[BOT] Spawned');
-    bot.chat('เข้าเกมแล้ว 🤖');
+    bot.chat('/create');
 
     // รีสตาร์ททุก 1 ชั่วโมง
     reconnectTimer = setTimeout(() => {
