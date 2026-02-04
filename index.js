@@ -1,27 +1,18 @@
-import mineflayer from 'mineflayer';
-import keep_alive from './keep_alive.js';
+const keep_alive = require('./keep_alive.js');
+const mineflayer = require("mineflayer");
 
-keep_alive(); // 👈 เรียกใช้งาน keep alive
+keep_alive();
 
 const bot = mineflayer.createBot({
   host: '191.96.231.13',
   port: 13863,
   username: 'ChatBot',
-  version: '1.20.1' // ✅ เวอร์ชันที่ Mineflayer รองรับ
+  version: '1.20.1' // ❗ Mineflayer ยังไม่รองรับ 1.21.x
 });
 
 bot.once('spawn', () => {
-  console.log('Bot เข้าเกมแล้ว');
   bot.chat('เข้าเกมแล้ว 🤖');
 });
 
-bot.on('chat', (username, message) => {
-  if (username === bot.username) return;
-
-  if (message === 'ping') {
-    bot.chat('pong');
-  }
-});
-
-bot.on('error', err => console.log('Error:', err));
-bot.on('end', () => console.log('Bot หลุดออกจากเซิร์ฟเวอร์'));
+bot.on('kicked', console.log);
+bot.on('error', console.log);
