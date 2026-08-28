@@ -6,7 +6,7 @@ let reconnectTimer = null;
 let isRestarting = false;
 
 const BOT_OPTIONS = {
-  host: 'frankyowen.mcsh.io',
+  host: 'ejoy.progamer.me',
   port: 25565,
   username: 'IronSaza',
   version: '1.20.1'
