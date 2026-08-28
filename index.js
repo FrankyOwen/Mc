@@ -7,7 +7,7 @@ let isRestarting = false;
 
 const BOT_OPTIONS = {
   host: 'ejoy.progamer.me',
-  port: 25565,
+  port: 40986,
   username: 'IronSaza',
   version: '1.20.1'
 };
