@@ -6,8 +6,8 @@ let reconnectTimer = null;
 let isRestarting = false;
 
 const BOT_OPTIONS = {
-  host: 'ejoy.progamer.me',
-  port: 40986,
+  host: '157.85.110.126',
+  port: 25565,
   username: 'IronSaza',
   version: '1.20.1'
 };
